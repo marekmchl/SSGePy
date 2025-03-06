@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_eq(self):
@@ -42,3 +42,88 @@ class TestLeafNode(unittest.TestCase):
     def test_leaf_node_to_html_3(self):
         node = LeafNode("p", "Hello, world!")
         self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+class TestParentNode(unittest.TestCase):
+    def test_parent_node_to_html_1(self):
+        node = ParentNode(
+            "p",
+            [
+                LeafNode("b", "Bold text"),
+                LeafNode(None, "Normal text"),
+                LeafNode("i", "italic text"),
+                LeafNode(None, "Normal text"),
+            ],
+        )
+
+        html_1 = node.to_html()
+        html_2 = "<p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p>"
+        self.assertEqual(html_1, html_2)
+
+    def test_parent_node_to_html_2(self):
+        node_1 = ParentNode("p", [LeafNode("b", "Bold text"), LeafNode(None, "Normal text"), LeafNode("i", "italic text"), LeafNode(None, "Normal text"),])
+        node_2 = ParentNode("p", [LeafNode("b", "Bold text"), node_1, LeafNode("i", "italic text"), LeafNode(None, "Normal text"),])
+        node_3 = ParentNode("p", [LeafNode("b", "Bold text"), node_2, LeafNode("i", "italic text"), LeafNode(None, "Normal text"),])
+
+        html_1 = node_3.to_html()
+        html_2 = "<p><b>Bold text</b><p><b>Bold text</b><p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p><i>italic text</i>Normal text</p><i>italic text</i>Normal text</p>"
+        self.assertEqual(html_1, html_2)
+
+    def test_parent_node_to_html_3(self):
+        node_1 = ParentNode("p", [LeafNode("b", "Bold text"), LeafNode(None, "Normal text"), LeafNode("i", "italic text"), LeafNode(None, "Normal text"),])
+        node_2 = ParentNode("p", [node_1, node_1, node_1])
+
+        html_1 = node_2.to_html()
+        html_2 = "<p><p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p><p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p><p><b>Bold text</b>Normal text<i>italic text</i>Normal text</p></p>"
+        self.assertEqual(html_1, html_2)
+
+    def test_parent_node_no_children_eq_1(self):
+        try:
+            test = ParentNode("p", None, {}).to_html()
+        except ValueError as e:
+            self.assertEqual(str(e), "missing children")
+
+    def test_parent_node_no_children_neq_1(self):
+        try:
+            test = ParentNode("p", None, {}).to_html()
+        except ValueError as e:
+            self.assertNotEqual(str(e), "missing tag")
+
+    def test_parent_node_no_children_eq_2(self):
+        try:
+            test = ParentNode("p", [], {}).to_html()
+        except ValueError as e:
+            self.assertEqual(str(e), "missing children")
+
+    def test_parent_node_no_children_neq_2(self):
+        try:
+            test = ParentNode("p", [], {}).to_html()
+        except ValueError as e:
+            self.assertNotEqual(str(e), "missing tag")
+
+    def test_parent_node_no_tag_eq_1(self):
+        try:
+            child = LeafNode(None, "Some text", None)
+            test = ParentNode(None, [child,], {}).to_html()
+        except ValueError as e:
+            self.assertEqual(str(e), "missing tag")
+
+    def test_parent_node_no_tag_neq_1(self):
+        try:
+            child = LeafNode(None, "Some text", None)
+            test = ParentNode(None, [child,], {}).to_html()
+        except ValueError as e:
+            self.assertNotEqual(str(e), "missing children")
+
+    def test_parent_node_no_tag_eq_2(self):
+        try:
+            child = LeafNode(None, "Some text", None)
+            test = ParentNode("", [child,], {}).to_html()
+        except ValueError as e:
+            self.assertEqual(str(e), "missing tag")
+
+    def test_parent_node_no_tag_neq_2(self):
+        try:
+            child = LeafNode(None, "Some text", None)
+            test = ParentNode("", [child,], {}).to_html()
+        except ValueError as e:
+            self.assertNotEqual(str(e), "missing children")
