@@ -12,20 +12,6 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode(" word", TextType.TEXT),
         ])
 
-    def test_split_delimiter_invalid_code_1(self):
-        try:
-            node = TextNode("This is text with a code block` word", TextType.TEXT)
-            new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        except Exception as e:
-            self.assertEqual(str(e), "invalid Markdown syntax - no delimeter found")
-
-    def test_split_delimiter_invalid_code_2(self):
-        try:
-            node = TextNode("This is text with a `code block word", TextType.TEXT)
-            new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
-        except Exception as e:
-            self.assertEqual(str(e), "invalid Markdown syntax - no closing delimeter")
-
     def test_split_delimiter_valid_bold_1(self):
         node = TextNode("This is text with a **bold block** word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
@@ -34,20 +20,6 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode("bold block", TextType.BOLD),
             TextNode(" word", TextType.TEXT),
         ])
-
-        def test_split_delimiter_invalid_bold_1(self):
-            try:
-                node = TextNode("This is text with a bold block** word", TextType.TEXT)
-                new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-            except Exception as e:
-                self.assertEqual(str(e), "invalid Markdown syntax - no delimeter found")
-
-        def test_split_delimiter_invalid_bold_2(self):
-            try:
-                node = TextNode("This is text with a **bold block word", TextType.TEXT)
-                new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
-            except Exception as e:
-                self.assertEqual(str(e), "invalid Markdown syntax - no closing delimeter")
 
     def test_split_delimiter_valid_italic_1(self):
         node = TextNode("This is text with an _italic block_ word", TextType.TEXT)
@@ -58,16 +30,60 @@ class TestSplitNodesDelimiter(unittest.TestCase):
             TextNode(" word", TextType.TEXT),
         ])
 
-        def test_split_delimiter_invalid_italic_1(self):
-            try:
-                node = TextNode("This is text with an italic block_ word", TextType.TEXT)
-                new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
-            except Exception as e:
-                self.assertEqual(str(e), "invalid Markdown syntax - no delimeter found")
+    def test_split_delimiter_badly_used_delimiter_1(self):
+        node = TextNode("This is text with a **bold block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        self.assertEqual(new_nodes, [TextNode("This is text with a **bold block word.", TextType.TEXT), ])
 
-        def test_split_delimiter_invalid_italic_2(self):
-            try:
-                node = TextNode("This is text with an _italic block word", TextType.TEXT)
-                new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
-            except Exception as e:
-                self.assertEqual(str(e), "invalid Markdown syntax - no closing delimeter")
+    def test_split_delimiter_badly_used_delimiter_2(self):
+        node = TextNode("This is text with a _italic block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+        self.assertEqual(new_nodes, [TextNode("This is text with a _italic block word.", TextType.TEXT), ])
+
+    def test_split_delimiter_badly_used_delimiter_3(self):
+        node = TextNode("This is text with a `code block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(new_nodes, [TextNode("This is text with a `code block word.", TextType.TEXT), ])
+
+    def test_split_delimiter_badly_used_delimiter_4(self):
+        node = TextNode("This is text with a bold** block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "**", TextType.BOLD)
+        self.assertEqual(new_nodes, [TextNode("This is text with a bold** block word.", TextType.TEXT), ])
+
+    def test_split_delimiter_badly_used_delimiter_5(self):
+        node = TextNode("This is text with a italic_ block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "_", TextType.ITALIC)
+        self.assertEqual(new_nodes, [TextNode("This is text with a italic_ block word.", TextType.TEXT), ])
+
+    def test_split_delimiter_badly_used_delimiter_6(self):
+        node = TextNode("This is text with a code` block word.", TextType.TEXT)
+        new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
+        self.assertEqual(new_nodes, [TextNode("This is text with a code` block word.", TextType.TEXT), ])
+
+    def test_split_delimiter_invalid_delimiter_1(self):
+        try:
+            node = TextNode("This is text with a `code block word", TextType.TEXT)
+            new_nodes = split_nodes_delimiter([node], "'", TextType.CODE)
+        except Exception as e:
+            self.assertEqual(str(e), "invalid delimiter")
+
+    def test_split_delimiter_invalid_delimiter_2(self):
+        try:
+            node = TextNode("This is text with a `code block word", TextType.TEXT)
+            new_nodes = split_nodes_delimiter([node], "-", TextType.CODE)
+        except Exception as e:
+            self.assertEqual(str(e), "invalid delimiter")
+
+    def test_split_delimiter_invalid_delimiter_3(self):
+        try:
+            node = TextNode("This is text with a `code block word", TextType.TEXT)
+            new_nodes = split_nodes_delimiter([node], "'", TextType.CODE)
+        except Exception as e:
+            self.assertNotEqual(str(e), "invalid elimiter")
+
+    def test_split_delimiter_invalid_delimiter_4(self):
+        try:
+            node = TextNode("This is text with a `code block word", TextType.TEXT)
+            new_nodes = split_nodes_delimiter([node], "'", TextType.CODE)
+        except Exception as e:
+            self.assertNotEqual(str(e), "invalid elimiter")

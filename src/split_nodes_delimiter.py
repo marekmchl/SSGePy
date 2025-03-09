@@ -1,3 +1,4 @@
+import re
 from textnode import TextType, TextNode
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -5,18 +6,30 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     for node in old_nodes:
         if node.text_type != TextType.TEXT:
             new_nodes.append(node)
+            continue
 
         text = node.text
-        index_left = text.find(delimiter)
-        if index_left == -1:
-            raise Exception("invalid Markdown syntax - no delimeter found")
+        match delimiter:
+            case "**":
+                blocks_list = re.findall(r"\*\*(.+?)\*\*", text)
+            case "`":
+                blocks_list = re.findall(r"`(.+?)`", text)
+            case "_":
+                blocks_list = re.findall(r"_(.+?)_", text)
+            case _:
+                raise Exception("invalid delimiter")
 
-        index_right = text.rfind(delimiter)
-        if index_right == -1:
-            raise Exception("invalid Markdown syntax - no closing delimiter")
+        if blocks_list == []:
+            new_nodes.append(node)
+            continue
 
-        new_nodes.append(TextNode(text[:index_left], node.text_type))
-        new_nodes.append(TextNode(text[index_left+len(delimiter):index_right], text_type))
-        new_nodes.append(TextNode(text[index_right+len(delimiter):], node.text_type))
+        for block in blocks_list:
+            left_index = text.find(delimiter)
+            new_nodes.append(TextNode(text[:left_index], TextType.TEXT))
+            new_nodes.append(TextNode(block, text_type, None))
+            # From the end of the current link to the end of the original text
+            text = text[left_index + 2*len(delimiter) + len(block):]
+        if text != "":
+            new_nodes.append(TextNode(text, TextType.TEXT))
 
     return new_nodes
