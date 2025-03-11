@@ -5,6 +5,10 @@ def markdown_to_blocks(markdown):
     full_block_list = markdown.split("\n\n")
     cleaned_block_list = []
     for block in full_block_list:
-        cleaned_block_list.append(block.lstrip().rstrip())
+        if block == "":
+            continue
+        else:
+            block = block.lstrip().rstrip()
+            cleaned_block_list.append(block)
 
     return cleaned_block_list

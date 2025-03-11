@@ -59,7 +59,7 @@ This is the same paragraph on a new line
 
     def test_markdown_to_blocks_trailing_whitespace_1(self):
         blocks = markdown_to_blocks("""
-Paragraph 		  	
+Paragraph
 """)
         control = ["Paragraph"]
         self.assertEqual(blocks, control)
@@ -69,4 +69,20 @@ Paragraph
  		 		 Paragraph
 """)
         control = ["Paragraph"]
+        self.assertEqual(blocks, control)
+
+    def test_markdown_to_blocks_excess_newlines_1(self):
+        blocks = markdown_to_blocks("""
+One line
+
+
+
+
+
+
+
+
+Two line
+""")
+        control = ["One line", "Two line"]
         self.assertEqual(blocks, control)
