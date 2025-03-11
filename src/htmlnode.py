@@ -28,6 +28,8 @@ class LeafNode(HTMLNode):
     def to_html(self):
         if self.tag == None:
             return f'{self.value}'
+        elif self.tag == "img":
+            return f'<img{self.props_to_html()}>'
         else:
             return f'<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>'
 
