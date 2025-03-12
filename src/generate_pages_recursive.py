@@ -1,7 +1,7 @@
 import os
 from generate_page import generate_page
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, current_dir=None):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath, current_dir=None):
     print("\n\n")
     if current_dir == []:
         return
@@ -28,8 +28,8 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, cur
         file_html = next_item.replace(".md", ".html")
         dest_to_html = dest_dir_path + "/" + file_html
         print(f"dest_toHtml: {dest_to_html}")
-        generate_page(new_content_path, template_path, dest_to_html)
-        return generate_pages_recursive(dir_path_content, template_path, dest_dir_path, current_dir)
+        generate_page(new_content_path, template_path, dest_to_html, basepath)
+        return generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath, current_dir)
     else:
-        generate_pages_recursive(new_content_path, template_path, new_dest_path, os.listdir(new_content_path))
-        return generate_pages_recursive(dir_path_content, template_path, dest_dir_path, current_dir)
+        generate_pages_recursive(new_content_path, template_path, new_dest_path, basepath, os.listdir(new_content_path))
+        return generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath, current_dir)
