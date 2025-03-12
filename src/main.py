@@ -1,7 +1,10 @@
-from textnode import TextNode, TextType
+from os import getcwd
+from os.path import join
+from copy_dir_contents import copy_dir_contents
 
 def main():
-    test_node = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    print(test_node)
+    src = join(getcwd(), "static")
+    dst = join(getcwd(), "public")
+    copy_dir_contents(src, dst)
 
 main()
