@@ -177,6 +177,7 @@ and [link](https://www.example.co.uk)
 - fun `code`
 - image ![image 2](path/no/fun/img2.jpg)
 - link [link 2](www.someaddresoranother.com)
+- [link 2](www.someaddresoranother.com)
 
 1. Ordered
 2. list **bold**
@@ -203,6 +204,6 @@ link [link 4](www.someaddresoranother.com)```
         node = markdown_to_html_node(md)
         html = node.to_html()
         self.assertEqual(
-            """<div><h1>First heading</h1><h2>Second heading</h2><p>Paragraph of some <i>italic</i> <b>bold</b> <code>code</code> text and <img src="path/to/image/img.png" alt="image"> and <a href="https://www.example.co.uk">link</a></p><ul><li>Unordered</li><li>list <b>bold</b></li><li>for <i>italic</i></li><li>fun <code>code</code></li><li>image <img src="path/no/fun/img2.jpg" alt="image 2"></li><li>link <a href="www.someaddresoranother.com">link 2</a></li></ul><ol><li>Ordered</li><li>list <b>bold</b></li><li>for <i>italic</i></li><li>fun <code>code</code></li><li>image <img src="path/no/fun/img2.jpg" alt="image 3"></li><li>link <a href="www.someaddresoranother.com">link 3</a></li></ol><blockquote>Now\nquote <b>bold</b>\nfor <i>italic</i>\ngrief <code>code</code>\nimage <img src="path/no/fun/img2.jpg" alt="image 4">\nlink <a href="www.someaddresoranother.com">link 4</a></blockquote><pre><code>Now\ncode **bold**\nfor _italic_\ngrief `code`\nimage ![image 4](path/no/fun/img2.jpg)\nlink [link 4](www.someaddresoranother.com)</code></pre></div>""",
+            """<div><h1>First heading</h1><h2>Second heading</h2><p>Paragraph of some <i>italic</i> <b>bold</b> <code>code</code> text and <img src="path/to/image/img.png" alt="image"> and <a href="https://www.example.co.uk">link</a></p><ul><li>Unordered</li><li>list <b>bold</b></li><li>for <i>italic</i></li><li>fun <code>code</code></li><li>image <img src="path/no/fun/img2.jpg" alt="image 2"></li><li>link <a href="www.someaddresoranother.com">link 2</a></li><li><a href="www.someaddresoranother.com">link 2</a></li></ul><ol><li>Ordered</li><li>list <b>bold</b></li><li>for <i>italic</i></li><li>fun <code>code</code></li><li>image <img src="path/no/fun/img2.jpg" alt="image 3"></li><li>link <a href="www.someaddresoranother.com">link 3</a></li></ol><blockquote>Now\nquote <b>bold</b>\nfor <i>italic</i>\ngrief <code>code</code>\nimage <img src="path/no/fun/img2.jpg" alt="image 4">\nlink <a href="www.someaddresoranother.com">link 4</a></blockquote><pre><code>Now\ncode **bold**\nfor _italic_\ngrief `code`\nimage ![image 4](path/no/fun/img2.jpg)\nlink [link 4](www.someaddresoranother.com)</code></pre></div>""",
             html
         )

@@ -39,7 +39,7 @@ def make_unordered_list(data):
     rows_text = data.split("\n")
     rows_nodes = []
     for row in rows_text:
-        children = text_to_children(" ".join(row.split(" ")[1:]))
+        children = text_to_children(row[2:])
         rows_nodes.append(ParentNode("li", children))
 
     return ParentNode("ul", rows_nodes)

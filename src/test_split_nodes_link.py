@@ -100,6 +100,20 @@ class TestSplitNodesLink(unittest.TestCase):
                 new_nodes,
             )
 
+    def test_split_links_link_at_the_beginning(self):
+            node = TextNode(
+                "[link](https://i.imgur.com/zjjcJKZ.png) link before here!",
+                TextType.TEXT,
+            )
+            new_nodes = split_nodes_link([node])
+            self.assertListEqual(
+                [
+                    TextNode("link", TextType.LINK, "https://i.imgur.com/zjjcJKZ.png"),
+                    TextNode(" link before here!", TextType.TEXT),
+                ],
+                new_nodes,
+            )
+
     # def test_split_links_invalid_syntax(self):
     #         node = TextNode(
     #             "This is text with a [link](https://i.imgur.com/zjjcJKZ.png) and a a few invalid ones: [) [] () and another [second link](https://i.imgur.com/3elNhQu.png) and another [third link](https://www.example.com/img.png)",

@@ -124,3 +124,17 @@ class TestSplitNodesImage(unittest.TestCase):
             ],
             new_nodes,
         )
+
+    def test_split_image_image_at_the_beginning(self):
+            node = TextNode(
+                "![image](https://i.imgur.com/zjjcJKZ.png) image before here!",
+                TextType.TEXT,
+            )
+            new_nodes = split_nodes_image([node])
+            self.assertListEqual(
+                [
+                    TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
+                    TextNode(" image before here!", TextType.TEXT),
+                ],
+                new_nodes,
+            )
