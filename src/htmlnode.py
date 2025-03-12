@@ -44,8 +44,7 @@ class ParentNode(HTMLNode):
         if self.children == None or self.children == []:
             raise ValueError("missing children")
 
-        string = f"<{self.tag}>"
+        string = ""
         for child in self.children:
             string += child.to_html()
-        string += f"</{self.tag}>"
-        return string
+        return f"<{self.tag}>{string.lstrip().rstrip()}</{self.tag}>"
