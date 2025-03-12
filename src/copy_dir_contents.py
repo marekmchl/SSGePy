@@ -31,4 +31,5 @@ def copy_dir_contents(src_dir_path, dst_dir_path, parent_dir_contents=None):
         return copy_dir_contents(src_dir_path, dst_dir_path, parent_dir_contents)
     else:
         print(f"\nCrawling into a directory...\n\tSrc: {new_src_path}\n\tDst: {new_dst_path}")
-        return copy_dir_contents(new_src_path, new_dst_path, os.listdir(new_src_path))
+        copy_dir_contents(new_src_path, new_dst_path, os.listdir(new_src_path))
+        return copy_dir_contents(src_dir_path, dst_dir_path, parent_dir_contents)
